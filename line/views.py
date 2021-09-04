@@ -3,4 +3,8 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the lines index.")
+    return HttpResponse("Hello, Greg. You're at the lines index.")
+
+
+def goal_view(request):
+    return render(request, 'goal_view.html')
