@@ -11,6 +11,7 @@
 
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <script src="{% static '../static/goal_view.js' %}"></script>
 
 <div class="container">
 	<div class="row">
@@ -81,7 +82,7 @@
 			<div class="panel panel-default">
 		  	<div class="panel-body">
 		    	<h1>Goal</h1>
-		    	<h2>{{current_line.goal_time}}</h2>
+		    	<h2>{{current_line.cycle_time}}</h2>
 		  	</div>
 			</div>
 		</div>
