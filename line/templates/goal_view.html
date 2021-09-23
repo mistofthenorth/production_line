@@ -74,16 +74,31 @@
 		  	<div class="panel-body">
 		  		<h1>Actual</h1>
 		  		<p>
-					<h2>00</h2>
-				</div>
+					<h2 id="actual-units">00</h2>
 			</div>
+			</div>
+			<button type="button" class="btn btn-primary" id="unit-done">Add Unit</button>
+			<button type="button" class="btn btn-primary" id="unit-remove">Remove Unit</button>
 		</div>
 		<div class="col-md-6" align="center">
 			<div class="panel panel-default">
 		  	<div class="panel-body">
 		    	<h1>Goal</h1>
-		    	<h2>{{current_line.cycle_time}}</h2>
+		    	<h2 id="goal">{{current_line.goal_time}}</h2>
 		  	</div>
+		  	<div class="panel-body">
+		    	<h1>Goal</h1>
+		    	<h2 id="current-goal-units">00</h2>
+		  	</div>
+			</div>
+			<button type="button" class="btn btn-primary col-md-2" id="start-timer">Start Timer</button>
+			<button type="button" class="btn btn-primary col-md-2" id="stop-timer">Stop Timer</button>
+
+			<div class="panel panel-default col-md-8">
+				<div class="panel-body">
+				  <h1>Cycle Time</h1>
+				  <h2 id="cycle-time">{{current_line.cycle_time}}</h2>
+				</div>
 			</div>
 		</div>
 	</div>
