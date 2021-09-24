@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pallet Shelter Production</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <!-- Bootstrap -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+  </head>
+  <body>
+
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <script src="{% static '../static/goal_view.js' %}"></script>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-6"><img src="{% static 'Pallet_Logo.png' %}" alt="Pallet Logo" height="150" width="150"></div>
+		<div class="col-md-6"></div>
+	</div>
+
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/admin">Admin</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Value Streams<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+          	{% for line in lines %}
+						<li><a href="/line/goal_view?line={{line.uid}}">{{line.description}}</a></li>
+						{% endfor %}
+          </ul>
+        </li>
+      </ul>
+      
+      
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+	<div class="row">
+		
+	</div>
+	<div class="row">
+		<hr>
+	</div>
+	<div class="row">
+		<div class="span12">
+			
+		</div>
+	</div>
+	<div class="jumbotron">
+  		<div align="center">
+  			<h1>{{current_line.description}}</h1>
+  		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6" align="center">
+			<div class="panel panel-default">
+		  	<div class="panel-body">
+		  		<h1>Actual</h1>
+		  		<p>
+					<h2 id="actual-units">00</h2>
+			</div>
+			</div>
+			<button type="button" class="btn btn-primary" id="unit-done">Add Unit</button>
+			<button type="button" class="btn btn-primary" id="unit-remove">Remove Unit</button>
+		</div>
+		<div class="col-md-6" align="center">
+			<div class="panel panel-default">
+		  	<div class="panel-body">
+		    	<h1>Goal</h1>
+		    	<h2 id="goal">{{current_line.goal_time}}</h2>
+		  	</div>
+		  	<div class="panel-body">
+		    	<h1>Current Unit Goal</h1>
+		    	<h2 id="current-goal-units">00</h2>
+		  	</div>
+			</div>
+			<button type="button" class="btn btn-primary col-md-2" id="start-timer">Start Timer</button>
+			<button type="button" class="btn btn-primary col-md-2" id="stop-timer">Stop Timer</button>
+
+			<div class="panel panel-default col-md-8">
+				<div class="panel-body">
+				  <h1>Cycle Time</h1>
+				  <h2 id="cycle-time">{{current_line.cycle_time}}</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+
+  </body>
+</html>
+
+<html>
+
+
+
+
+
+</html>

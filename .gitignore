@@ -1,6 +1,8 @@
 # Specify filepatterns you want git to ignore.
 
 *.pyc
-db.sqlite3
+*.sqlite3
 line/migrations/*
 github
+*.sublime-project
+*.sublime-workspace
