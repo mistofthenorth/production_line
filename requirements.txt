@@ -10,7 +10,6 @@ certifi==2021.5.30
 cffi==1.14.6
 charset-normalizer==2.0.6
 colorama==0.4.3
-cryptography==3.4.8
 Django==3.2.6
 docker==4.4.4
 docker-compose==1.25.5
