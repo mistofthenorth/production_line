@@ -6,6 +6,7 @@ line/migrations/*
 github
 *.sublime-project
 *.sublime-workspace
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

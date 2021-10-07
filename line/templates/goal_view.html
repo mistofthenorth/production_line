@@ -52,16 +52,9 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-	<div class="row">
-		
-	</div>
+
 	<div class="row">
 		<hr>
-	</div>
-	<div class="row">
-		<div class="span12">
-			
-		</div>
 	</div>
 	<div class="jumbotron">
   		<div align="center">
@@ -71,40 +64,64 @@
 	<div class="row">
 		<div class="col-md-6" align="center">
 			<div class="panel panel-default">
-		  	<div class="panel-body">
-		  		<h1>Actual</h1>
-		  		<p>
-					<h2 id="actual-units">00</h2>
+
+				<div class="panel-body">
+		    	<h1 style="font-size:80px;">Goal</h1>
+		    	<h2 id="current-goal-units" style="font-size:120px;">00</h2>
+		  	</div>
+
+			  	<div class="row">
+					  <div class="col-md-6" align="center">
+						  	<div class="panel-body">
+						    	<h1>Cycle</h1>
+						    	<h2 id="goal">{{current_line.cycle_time}}</h2>
+						  	</div>
+					  </div>
+					  <div class="col-md-6" align="center">
+					  	<div class="panel-body">
+					    	<h1>Daily Goal</h1>
+					    	<h2 id="goal">{{current_line.goal_time}}</h2>
+					  	</div>
+					  </div>
+					</div>
+						<h2>
+							<div class="row" id="current-date">
+								date
+							</div>
+						</h2>
 			</div>
-			</div>
-			<button type="button" class="btn btn-primary" id="unit-done">Add Unit</button>
-			<button type="button" class="btn btn-primary" id="unit-remove">Remove Unit</button>
+
 		</div>
 		<div class="col-md-6" align="center">
 			<div class="panel panel-default">
-		  	<div class="panel-body">
-		    	<h1>Goal</h1>
-		    	<h2 id="goal">{{current_line.goal_time}}</h2>
-		  	</div>
-		  	<div class="panel-body">
-		    	<h1>Goal</h1>
-		    	<h2 id="current-goal-units">00</h2>
-		  	</div>
-			</div>
-			<button type="button" class="btn btn-primary col-md-2" id="start-timer">Start Timer</button>
-			<button type="button" class="btn btn-primary col-md-2" id="stop-timer">Stop Timer</button>
 
-			<div class="panel panel-default col-md-8">
+		  	<div class="panel-body">
+		  		<h1 style="font-size:80px;">Actual</h1>
+		  		
+					<h2 id="actual-units" style="font-size:120px;">00</h2>
+						<button type="button" class="btn btn-primary" id="unit-done">Add Unit</button>
+						<button type="button" class="btn btn-primary" id="unit-remove">Remove Unit</button>
+			</div>
+			</div>
+
+			<div class="panel panel-default col-md-12">
 				<div class="panel-body">
-				  <h1>Cycle Time</h1>
+				  <h1>Current Cycle</h1>
 				  <h2 id="cycle-time">{{current_line.cycle_time}}</h2>
+				  <button type="button" class="btn btn-primary" id="start-timer">Start Timer</button>
+					<button type="button" class="btn btn-primary" id="stop-timer">Stop Timer</button>
 				</div>
+
+
 			</div>
 		</div>
 	</div>
 
+
   </body>
 </html>
+
+
 
 <html>
 
