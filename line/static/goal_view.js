@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let unitDone = document.getElementById("unit-done");
     let unitRemove = document.getElementById("unit-remove");
     let currentDate = document.getElementById("current-date");
+    let actual = document.getElementById("actual");
 
     console.log(cycleTime.textContent);
 
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let unitTotal = parseInt(actualUnits.textContent);
         unitTotal++;
         actualUnits.innerHTML = unitTotal;
+        actual.value = unitTotal;
     };
 
     const removeUnit = () => {
@@ -57,6 +59,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
     currentDate.innerHTML = 'Date <br>' + new Date().toLocaleDateString("en-US");
+
 
 
 

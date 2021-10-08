@@ -21,6 +21,9 @@ class Goal(models.Model):
     start_time = models.DateTimeField()
     finish_time = models.DateTimeField()
 
+    def __str__(self):
+        return f"{self.line.description} - {self.date}"
+
 
 class Reason(models.Model):
     code = models.IntegerField()

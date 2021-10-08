@@ -116,7 +116,11 @@
 			</div>
 		</div>
 	</div>
-
+	<form action="submit" method="post">{% csrf_token %}
+	<input type="hidden" id="actual" name="actual" value="0">
+	<input type="hidden" id="line" name="line" value="{{current_line.uid}}">
+	<button type="submit" class="btn btn-primary center-block" id="submit" value="foo">Submit</button>
+	</form>
 
   </body>
 </html>
