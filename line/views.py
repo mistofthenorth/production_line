@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-from .models import Line, Goal
+from .models import Line, Goal, Reason
 import datetime
 
 
@@ -29,10 +29,18 @@ def submit(request):
     except:
         line = 0
         actual = 0
+    template = loader.get_template('submit.html')
 
     print(f"The line is {str(line)}")
     print(request.POST)
     current_line = Line.objects.filter(uid=line).first()
     now = datetime.datetime.now()
-    Goal.objects.get_or_create(date=now, line=current_line, goal=current_line.goal_time, actual=actual, start_time=now, finish_time=now)
-    return HttpResponse("Data was received")
+    lines = Line.objects.all()
+    reasons = Reason.objects.all()
+
+    # Goal.objects.get_or_create(date=now, line=current_line, goal=current_line.goal_time, actual=actual, start_time=now, finish_time=now)
+    context = {'current_line': current_line, 'actual' : actual, 'now' : now, 'lines' : lines, 'reasons' : reasons}
+    return HttpResponse(template.render(context, request))
+
+def received(request):
+    pass
