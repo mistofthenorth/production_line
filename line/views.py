@@ -6,7 +6,11 @@ import datetime
 
 
 def index(request):
-    return HttpResponse("Hello, Greg. You're at the lines index.")
+    template = loader.get_template('index.html')
+    lines = Line.objects.all()
+
+    context = {'lines' : lines}
+    return HttpResponse(template.render(context, request))
 
 
 def goal_view(request):
@@ -36,11 +40,29 @@ def submit(request):
     current_line = Line.objects.filter(uid=line).first()
     now = datetime.datetime.now()
     lines = Line.objects.all()
-    reasons = Reason.objects.all()
+    reasons = Reason.objects.all().order_by('code')
 
-    # Goal.objects.get_or_create(date=now, line=current_line, goal=current_line.goal_time, actual=actual, start_time=now, finish_time=now)
     context = {'current_line': current_line, 'actual' : actual, 'now' : now, 'lines' : lines, 'reasons' : reasons}
     return HttpResponse(template.render(context, request))
 
-def received(request):
-    pass
+
+def receive(request):
+    print(request.POST)
+    current_value_stream = request.POST['current_value_stream']
+    actual_units_completed = request.POST['actual_units_completed']
+    goal_units_completed = request.POST['goal_units_completed']
+    reason = request.POST['reason']
+    additional = request.POST['additional']
+
+    now = datetime.datetime.now()
+    current_line = Line.objects.filter(uid=current_value_stream).first()
+
+    Goal.objects.get_or_create(date=now, line=current_line, goal=current_line.goal_time, actual=actual_units_completed, reason=Reason.objects.filter(code=reason).first(), comment=additional)
+    goals = Goal.objects.all().order_by('-date')
+    lines = Line.objects.all()
+
+    context = {'goals' : goals, 'lines': lines}
+
+    template = loader.get_template('receive.html')
+
+    return HttpResponse(template.render(context, request))

@@ -53,42 +53,6 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<form id="values_form" action="receive" method="post">
-{% csrf_token %}
-
-  <div class="form-group">
-    <label for="current_line_name">Current Value Stream</label>
-    <input type="hidden" class="form-control" name="current_value_stream" id="current_value_stream" value="{{current_line.uid}}">
-    <input type="text" class="form-control" name="current_value_stream" id="current_value_stream" value="{{current_line.description}}" disabled="disabled">
-  </div>
-  <div class="form-group">
-    <label for="actual_units">Actual Units Completed</label>
-    <input type="hidden" class="form-control" name="actual_units_completed" id="actual_units_completed" value="{{actual}}">
-    <input type="text" class="form-control" name="actual_units_completed" id="actual_units_completed" value="{{actual}}" disabled="disabled">
-  </div>
-  <div class="form-group">
-    <label for="goal_units">Goal Units Completed</label>
-    <input type="hidden" class="form-control" name="goal_units_completed" id="goal_units_completed" value="{{current_line.goal_time}}">
-    <input type="text" class="form-control" name="goal_units_completed" id="goal_units_completed" value="{{current_line.goal_time}}" disabled="disabled">
-  </div>
-   
-  <div class="form-group">
-  <label for="reason_code">Reason Code (optional)</label>
-
-  <select class="form-control" id="reason" name="reason">
-    {% for reason in reasons %}
-      <option value="{{reason.code}}">{{reason.code}} - {{reason.description}}</option>
-    {% endfor %}
-  </select>
-  </div>
-  <div class="form-group">
-    <label for="additional">Additional Information</label>
-    <input type="text" class="form-control" id="additional" name="additional" value="">
-  </div>
-
-  <button type="submit" class="btn btn-default">Submit</button>
-
-</form>
-
-
-</div>
+<h1 align=center>
+Choose a value stream from the menu above
+</h1>
