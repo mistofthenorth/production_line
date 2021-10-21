@@ -66,3 +66,4 @@ def receive(request):
     template = loader.get_template('receive.html')
 
     return HttpResponse(template.render(context, request))
+

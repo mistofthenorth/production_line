@@ -8,6 +8,23 @@ class Line(models.Model):
     uid = models.CharField(max_length=200, unique=True)
     cycle_time = models.IntegerField()
     goal_time = models.IntegerField()
+    colorChoices = (
+        ('Grey', 'Grey'),
+        ('Gold', 'Yellow'),
+        ('DodgerBlue', 'Light Blue'),
+        ('Green', 'Green'),
+        ('Orange', 'Orange'),
+        ('Purple', 'Purple'),
+        ('White', 'White'),
+        ('Red', 'Red'),
+        ('DodgerBlue', 'Medium Blue'),
+        ('CornflowerBlue', 'Light Blue')
+        )
+    color = models.CharField(
+        max_length=16,
+        choices=colorChoices,
+        default='Grey',
+        null=True)
 
     def __str__(self):
         return self.description
