@@ -8,6 +8,7 @@ class Line(models.Model):
     uid = models.CharField(max_length=200, unique=True)
     cycle_time = models.IntegerField()
     goal_time = models.IntegerField()
+    default_headcount = models.IntegerField(default=2)
     colorChoices = (
         ('Grey', 'Grey'),
         ('Gold', 'Yellow'),
@@ -43,6 +44,7 @@ class Goal(models.Model):
     line = models.ForeignKey(Line, on_delete=models.CASCADE)
     goal = models.IntegerField()
     actual = models.IntegerField()
+    headcount = models.IntegerField()
     reason = models.ForeignKey(Reason, on_delete=models.SET_NULL, null=True)
     comment = models.CharField(max_length=1000, null=True)
 

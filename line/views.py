@@ -52,12 +52,13 @@ def receive(request):
     actual_units_completed = request.POST['actual_units_completed']
     goal_units_completed = request.POST['goal_units_completed']
     reason = request.POST['reason']
+    headcount = request.POST['headcount']
     additional = request.POST['additional']
 
     now = datetime.datetime.now()
     current_line = Line.objects.filter(uid=current_value_stream).first()
 
-    Goal.objects.get_or_create(date=now, line=current_line, goal=current_line.goal_time, actual=actual_units_completed, reason=Reason.objects.filter(code=reason).first(), comment=additional)
+    Goal.objects.get_or_create(date=now, line=current_line, goal=current_line.goal_time, actual=actual_units_completed, reason=Reason.objects.filter(code=reason).first(), comment=additional, headcount=headcount)
     goals = Goal.objects.all().order_by('-date')
     lines = Line.objects.all()
 
