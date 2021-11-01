@@ -43,10 +43,13 @@ class Goal(models.Model):
     date = models.DateTimeField()
     line = models.ForeignKey(Line, on_delete=models.CASCADE)
     goal = models.IntegerField()
+    real_time_goal = models.IntegerField(null=True)
     actual = models.IntegerField()
+    cycle_time = models.IntegerField()
     headcount = models.IntegerField()
     reason = models.ForeignKey(Reason, on_delete=models.SET_NULL, null=True)
     comment = models.CharField(max_length=1000, null=True)
+    is_active = models.BooleanField()
 
     def __str__(self):
         return f"{self.line.description} - {self.date}"

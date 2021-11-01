@@ -67,14 +67,19 @@
     <input type="text" class="form-control" name="actual_units_completed" id="actual_units_completed" value="{{actual}}" disabled="disabled">
   </div>
   <div class="form-group">
-    <label for="goal_units">Goal Units Completed</label>
+    <label for="geal time goal_units">Real Time Goal Units</label>
+    <input type="hidden" class="form-control" name="real_time_goal" id="real_time_goal" value="{{real_time_goal}}">
+    <input type="text" class="form-control" name="real_time_goal" id="real_time_goal" value="{{real_time_goal}}" disabled="disabled">
+  </div>
+  <div class="form-group">
+    <label for="goal_units">Daily Goal Units</label>
     <input type="hidden" class="form-control" name="goal_units_completed" id="goal_units_completed" value="{{current_line.goal_time}}">
     <input type="text" class="form-control" name="goal_units_completed" id="goal_units_completed" value="{{current_line.goal_time}}" disabled="disabled">
   </div>
   <div class="form-group">
-    <label for="goal_units">Goal Units Completed</label>
-    <input type="hidden" class="form-control" name="goal_units_completed" id="goal_units_completed" value="{{current_line.goal_time}}">
-    <input type="text" class="form-control" name="goal_units_completed" id="goal_units_completed" value="{{current_line.goal_time}}" disabled="disabled">
+    <label for="cycle time">Cycle Time</label>
+    <input type="hidden" class="form-control" name="cycle_time" id="cycle_time" value="{{current_line.cycle_time}}">
+    <input type="text" class="form-control" name="cycle_time" id="cycle_time" value="{{current_line.cycle_time}}" disabled="disabled">
   </div>
    
   <div class="form-group">
