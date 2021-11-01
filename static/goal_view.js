@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let unitRemove = document.getElementById("unit-remove");
     let currentDate = document.getElementById("current-date");
     let actual = document.getElementById("actual");
+    let real_time_goal = document.getElementById("real_time_goal");
 
     console.log(cycleTime.textContent);
 
@@ -23,7 +24,32 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (currentTimer === 0){
                 currentTimer = originalCycleTime;
                 units++;
-                currentGoalUnits.innerHTML = units;  
+                currentGoalUnits.innerHTML = units;
+                real_time_goal.value = units;
+                console.log('We hit zero')
+                $.ajax({
+                    headers: { "X-CSRFToken": token },
+                    data: {'thing' : actualUnits.textContent }, // get the form data
+                    url: "console_print",
+                    dataType: 'json',
+                    method: "POST",
+                    // on success
+                    success: function (response) {
+                        if (response.test == true) {
+                            console.log('Success')
+                        }
+                        else {
+                            console.log('Failure')
+
+                        }
+
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response.responseJSON.errors)
+                    }
+                });
             }
         }, 1000);
 
@@ -59,11 +85,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
     currentDate.innerHTML = 'Date <br>' + new Date().toLocaleDateString("en-US");
-
-
-
-
-
 
 
 })
