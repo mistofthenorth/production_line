@@ -12,6 +12,32 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     console.log(cycleTime.textContent);
 
+    function update_goal() {
+        $.ajax({
+        headers: { "X-CSRFToken": token },
+        data: {'actual_units' : actualUnits.textContent, 'goal_units' : currentGoalUnits.innerHTML, 'current_line' : current_line }, // get the form data
+        url: "update_goal",
+        dataType: 'json',
+        method: "POST",
+        // on success
+        success: function (response) {
+            if (response.test == true) {
+                console.log('Success')
+            }
+            else {
+                console.log('Failure')
+
+            }
+
+        },
+        // on error
+        error: function (response) {
+            // alert the error if any error occured
+            console.log(response.responseJSON.errors)
+            }
+        });
+    }
+
     const startCycleTimer = () => {
         startTimer.classList.add("invisible");
         let units = parseInt(currentGoalUnits.textContent)
@@ -27,29 +53,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 currentGoalUnits.innerHTML = units;
                 real_time_goal.value = units;
                 console.log('We hit zero')
-                $.ajax({
-                    headers: { "X-CSRFToken": token },
-                    data: {'thing' : actualUnits.textContent }, // get the form data
-                    url: "console_print",
-                    dataType: 'json',
-                    method: "POST",
-                    // on success
-                    success: function (response) {
-                        if (response.test == true) {
-                            console.log('Success')
-                        }
-                        else {
-                            console.log('Failure')
-
-                        }
-
-                    },
-                    // on error
-                    error: function (response) {
-                        // alert the error if any error occured
-                        console.log(response.responseJSON.errors)
-                    }
-                });
+                update_goal()
             }
         }, 1000);
 
@@ -66,6 +70,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         unitTotal++;
         actualUnits.innerHTML = unitTotal;
         actual.value = unitTotal;
+        update_goal();
     };
 
     const removeUnit = () => {
@@ -76,6 +81,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             unitTotal--;
             actualUnits.innerHTML = unitTotal;
         }
+        update_goal();
         
     }
 

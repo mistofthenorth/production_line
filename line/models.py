@@ -20,7 +20,7 @@ class Line(models.Model):
         ('Red', 'Red'),
         ('DodgerBlue', 'Medium Blue'),
         ('CornflowerBlue', 'Light Blue')
-        )
+    )
     color = models.CharField(
         max_length=16,
         choices=colorChoices,
@@ -40,16 +40,19 @@ class Reason(models.Model):
 
 
 class Goal(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
     line = models.ForeignKey(Line, on_delete=models.CASCADE)
     goal = models.IntegerField()
     real_time_goal = models.IntegerField(null=True)
-    actual = models.IntegerField()
+    actual = models.IntegerField(null=True)
     cycle_time = models.IntegerField()
     headcount = models.IntegerField()
     reason = models.ForeignKey(Reason, on_delete=models.SET_NULL, null=True)
     comment = models.CharField(max_length=1000, null=True)
     is_active = models.BooleanField()
+
+    class Meta:
+        unique_together = ('date', 'line',)
 
     def __str__(self):
         return f"{self.line.description} - {self.date}"

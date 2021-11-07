@@ -7,4 +7,5 @@ urlpatterns = [
     path('goal_view', views.goal_view, name='goal'),
     path('submit', views.submit, name='submit'),
     path('receive', views.receive, name='receive'),
-    path('console_print', views.console_print, name='console_print')]
+    path('update_goal', views.update_goal, name='update_goal'),
+    path('manager_view', views.manager_view, name='manager_view')]

@@ -11,6 +11,10 @@
   <script>var token = '{{csrf_token}}'</script>
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <script>
+  	let current_line = {{current_line.uid}};
+  </script>
+
   <script src="{% static '../static/goal_view.js' %}"></script>
 
 <div class="container">
@@ -33,6 +37,16 @@
       </button>
       <a class="navbar-brand" href="/admin">Admin</a>
     </div>
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/manager_view">Manager</a>
+    </div>
+
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -67,7 +81,7 @@
 
 				<div class="panel-body">
 		    	<h1 style="font-size:80px;">Goal</h1>
-		    	<h2 id="current-goal-units" style="font-size:120px;">00</h2>
+		    	<h2 id="current-goal-units" style="font-size:120px;">{{active_goal.real_time_goal}}</h2>
 		  	</div>
 
 			  	<div class="row">
@@ -98,7 +112,7 @@
 		  	<div class="panel-body">
 		  		<h1 style="font-size:80px;">Actual</h1>
 		  		
-					<h2 id="actual-units" style="font-size:120px;">00</h2>
+					<h2 id="actual-units" style="font-size:120px;">{{active_goal.actual}}</h2>
 						<button type="button" class="btn btn-primary" id="unit-done">Add Unit</button>
 						<button type="button" class="btn btn-primary" id="unit-remove">Remove Unit</button>
 			</div>
