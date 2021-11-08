@@ -9,13 +9,48 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let currentDate = document.getElementById("current-date");
     let actual = document.getElementById("actual");
     let real_time_goal = document.getElementById("real_time_goal");
+    let submit = document.getElementById("submit");
 
     console.log(cycleTime.textContent);
 
+    if (is_active === 'False'){
+        startTimer.disabled = true;
+        stopTimer.disabled = true;
+        submit.disabled = true;
+        unitDone.disabled = true;
+        unitRemove.disabled = true;
+    }
+
+    function update_goal() {
+        $.ajax({
+        headers: { "X-CSRFToken": token },
+        data: {'actual_units' : actualUnits.textContent, 'goal_units' : currentGoalUnits.innerHTML, 'current_line' : current_line }, // get the form data
+        url: "update_goal",
+        dataType: 'json',
+        method: "POST",
+        // on success
+        success: function (response) {
+            if (response.test == true) {
+                console.log('Success')
+            }
+            else {
+                console.log('Failure')
+
+            }
+
+        },
+        // on error
+        error: function (response) {
+            // alert the error if any error occured
+            console.log(response.responseJSON.errors)
+            }
+        });
+    }
+
     const startCycleTimer = () => {
-        startTimer.classList.add("invisible");
-        let units = parseInt(currentGoalUnits.textContent)
-        let originalCycleTime = parseInt(cycleTime.textContent);
+        startTimer.disabled = true;
+        let units = parseInt(currentGoalUnits.textContent);
+        let originalCycleTime = parseInt(default_cycle_time);
         let currentTimer = parseInt(cycleTime.textContent);
         console.log(currentTimer);
         let countDown = setInterval(function(){
@@ -26,35 +61,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 units++;
                 currentGoalUnits.innerHTML = units;
                 real_time_goal.value = units;
-                console.log('We hit zero')
-                $.ajax({
-                    headers: { "X-CSRFToken": token },
-                    data: {'thing' : actualUnits.textContent }, // get the form data
-                    url: "console_print",
-                    dataType: 'json',
-                    method: "POST",
-                    // on success
-                    success: function (response) {
-                        if (response.test == true) {
-                            console.log('Success')
-                        }
-                        else {
-                            console.log('Failure')
-
-                        }
-
-                    },
-                    // on error
-                    error: function (response) {
-                        // alert the error if any error occured
-                        console.log(response.responseJSON.errors)
-                    }
-                });
+                update_goal();
             }
         }, 1000);
 
         const stopCycleTimer = () => {
-            startTimer.classList.remove("invisible");
+            startTimer.disabled = false;
             clearInterval(countDown)
         }
 
@@ -66,6 +78,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         unitTotal++;
         actualUnits.innerHTML = unitTotal;
         actual.value = unitTotal;
+        update_goal();
     };
 
     const removeUnit = () => {
@@ -76,6 +89,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             unitTotal--;
             actualUnits.innerHTML = unitTotal;
         }
+        update_goal();
         
     }
 
