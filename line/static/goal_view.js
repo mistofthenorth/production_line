@@ -9,8 +9,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let currentDate = document.getElementById("current-date");
     let actual = document.getElementById("actual");
     let real_time_goal = document.getElementById("real_time_goal");
+    let submit = document.getElementById("submit");
 
     console.log(cycleTime.textContent);
+
+    if (is_active === 'False'){
+        startTimer.disabled = true;
+        stopTimer.disabled = true;
+        submit.disabled = true;
+        unitDone.disabled = true;
+        unitRemove.disabled = true;
+    }
 
     function update_goal() {
         $.ajax({
@@ -39,9 +48,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     const startCycleTimer = () => {
-        startTimer.classList.add("invisible");
-        let units = parseInt(currentGoalUnits.textContent)
-        let originalCycleTime = parseInt(cycleTime.textContent);
+        startTimer.disabled = true;
+        let units = parseInt(currentGoalUnits.textContent);
+        let originalCycleTime = parseInt(default_cycle_time);
         let currentTimer = parseInt(cycleTime.textContent);
         console.log(currentTimer);
         let countDown = setInterval(function(){
@@ -52,13 +61,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 units++;
                 currentGoalUnits.innerHTML = units;
                 real_time_goal.value = units;
-                console.log('We hit zero')
-                update_goal()
+                update_goal();
             }
         }, 1000);
 
         const stopCycleTimer = () => {
-            startTimer.classList.remove("invisible");
+            startTimer.disabled = false;
             clearInterval(countDown)
         }
 

@@ -47,8 +47,8 @@ class Goal(models.Model):
     actual = models.IntegerField(null=True)
     cycle_time = models.IntegerField()
     headcount = models.IntegerField()
-    reason = models.ForeignKey(Reason, on_delete=models.SET_NULL, null=True)
-    comment = models.CharField(max_length=1000, null=True)
+    reason = models.ForeignKey(Reason, on_delete=models.SET_NULL, null=True, blank=True)
+    comment = models.CharField(max_length=1000, null=True, blank=True)
     is_active = models.BooleanField()
 
     class Meta:

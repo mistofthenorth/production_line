@@ -28,14 +28,19 @@ def goal_view(request):
     except:
         (active_goal, created) = Goal.objects.get_or_create(line=current_line, date=now, goal=current_line.goal_time,
                                                             cycle_time=current_line.cycle_time, headcount=current_line.default_headcount, actual=0, real_time_goal=0, is_active=1)
-
     context = {'lines': lines, 'current_line': current_line,
                'active_goal': active_goal}
     return HttpResponse(template.render(context, request))
 
 
 def manager_view(request):
-    return HttpResponse('Test view')
+    template = loader.get_template('manager_view.html')
+    lines = Line.objects.all()
+    now = datetime.datetime.now().date()
+    open_goals = Goal.objects.filter(is_active=1)
+    closed_goals = Goal.objects.filter(is_active=0, date=now)
+    context = {'open_goals': open_goals, 'closed_goals': closed_goals, 'lines': lines}
+    return HttpResponse(template.render(context, request))
 
 
 def submit(request):
@@ -105,3 +110,8 @@ def update_goal(request):
     current_goal.save()
 
     return JsonResponse({'test': True})
+
+def base_extend(request):
+    template = loader.get_template('base_extend.html')
+    context = {}
+    return HttpResponse(template.render(context, request))    
