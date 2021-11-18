@@ -6,6 +6,8 @@
   	let default_cycle_time = {{current_line.cycle_time}}
   	var token = '{{csrf_token}}'
   	var is_active = '{{active_goal.is_active}}'
+  	var warning_units = '{{current_line.warning_units}}'
+  	var error_units = '{{current_line.error_units}}'
   </script>
   <script src="{% static '../static/goal_view.js' %}"></script>
 
@@ -51,7 +53,7 @@
 		<div class="col-md-6" align="center">
 			<div class="panel panel-default">
 
-		  	<div class="panel-body">
+		  	<div class="panel-body"  id="actual-container">
 		  		<h1 style="font-size:80px;">Actual</h1>
 		  		
 					<h2 id="actual-units" style="font-size:120px;">{{active_goal.actual}}</h2>

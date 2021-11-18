@@ -9,6 +9,8 @@ class Line(models.Model):
     cycle_time = models.IntegerField()
     goal_time = models.IntegerField()
     default_headcount = models.IntegerField(default=2)
+    warning_units = models.IntegerField(default=1)
+    error_units = models.IntegerField(default=3)
     colorChoices = (
         ('Grey', 'Grey'),
         ('Gold', 'Yellow'),

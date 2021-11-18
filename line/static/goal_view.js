@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let actual = document.getElementById("actual");
     let real_time_goal = document.getElementById("real_time_goal");
     let submit = document.getElementById("submit");
+    let actual_container = document.getElementById("actual-container");
 
     console.log(cycleTime.textContent);
 
@@ -21,7 +22,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
         unitRemove.disabled = true;
     }
 
+    function update_actual_color(){
+        console.log(warning_units)
+        console.log(error_units)
+        console.log(actualUnits.textContent)
+        console.log(currentGoalUnits.innerHTML)
+        if ((currentGoalUnits.innerHTML - actualUnits.textContent) >= warning_units){
+            actual_container.style.background = "yellow";
+            console.log(currentGoalUnits.innerHTML - actualUnits.textContent)
+        }
+        if ((currentGoalUnits.innerHTML - actualUnits.textContent) >= error_units){
+            actual_container.style.background = "red";
+            console.log(currentGoalUnits.innerHTML - actualUnits.textContent)
+        }
+        if ((currentGoalUnits.innerHTML - actualUnits.textContent) < warning_units){
+            actual_container.style.background = "transparent";
+            console.log(currentGoalUnits.innerHTML - actualUnits.textContent)
+        }
+
+    }
+
+    update_actual_color();
+
     function update_goal() {
+        update_actual_color();
         $.ajax({
         headers: { "X-CSRFToken": token },
         data: {'actual_units' : actualUnits.textContent, 'goal_units' : currentGoalUnits.innerHTML, 'current_line' : current_line }, // get the form data
