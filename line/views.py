@@ -37,9 +37,10 @@ def manager_view(request):
     template = loader.get_template('manager_view.html')
     lines = Line.objects.all()
     now = datetime.datetime.now().date()
-    open_goals = Goal.objects.filter(is_active=1)
+    open_goals = Goal.objects.filter(is_active=1, date=now)
     closed_goals = Goal.objects.filter(is_active=0, date=now)
-    context = {'open_goals': open_goals, 'closed_goals': closed_goals, 'lines': lines}
+    abandoned_goals = Goal.objects.filter(is_active=1, date__lt=now)
+    context = {'open_goals': open_goals, 'closed_goals': closed_goals, 'abandoned_goals': abandoned_goals, 'lines': lines}
     return HttpResponse(template.render(context, request))
 
 
@@ -107,8 +108,9 @@ def update_goal(request):
         line=current_line, date=datetime.datetime.now().date(), is_active=1).first()
     current_goal.actual = request.POST['actual_units']
     current_goal.real_time_goal = request.POST['goal_units']
+    current_goal.status = request.POST['color']
     current_goal.save()
-
+    print(request.POST['color'])
     return JsonResponse({'test': True})
 
 def base_extend(request):

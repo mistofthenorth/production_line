@@ -47,6 +47,16 @@ class Goal(models.Model):
     goal = models.IntegerField()
     real_time_goal = models.IntegerField(null=True)
     actual = models.IntegerField(null=True)
+    colorChoices = (
+        ('Red', 'Red'),
+        ('Yellow', 'Yellow'),
+        ('Transparent', 'Transparent')
+    )
+    status = models.CharField(
+        max_length=16,
+        choices=colorChoices,
+        default='Transparent',
+        null=True)
     cycle_time = models.IntegerField()
     headcount = models.IntegerField()
     reason = models.ForeignKey(Reason, on_delete=models.SET_NULL, null=True, blank=True)

@@ -27,28 +27,29 @@ document.addEventListener("DOMContentLoaded", (event) => {
         console.log(error_units)
         console.log(actualUnits.textContent)
         console.log(currentGoalUnits.innerHTML)
-        if ((currentGoalUnits.innerHTML - actualUnits.textContent) >= warning_units){
-            actual_container.style.background = "yellow";
-            console.log(currentGoalUnits.innerHTML - actualUnits.textContent)
-        }
-        if ((currentGoalUnits.innerHTML - actualUnits.textContent) >= error_units){
-            actual_container.style.background = "red";
-            console.log(currentGoalUnits.innerHTML - actualUnits.textContent)
-        }
-        if ((currentGoalUnits.innerHTML - actualUnits.textContent) < warning_units){
-            actual_container.style.background = "transparent";
-            console.log(currentGoalUnits.innerHTML - actualUnits.textContent)
-        }
 
+        if ((currentGoalUnits.innerHTML - actualUnits.textContent) >= error_units){
+            return_color = "Red"
+        }
+        else if ((currentGoalUnits.innerHTML - actualUnits.textContent) >= warning_units){
+            return_color = "Yellow"
+        }
+        else {
+            return_color = "Transparent"
+        }
+        actual_container.style.background = return_color;
+        console.log(currentGoalUnits.innerHTML - actualUnits.textContent);
+        return return_color;
     }
 
     update_actual_color();
 
     function update_goal() {
-        update_actual_color();
+        color = update_actual_color();
+        console.log(color);
         $.ajax({
         headers: { "X-CSRFToken": token },
-        data: {'actual_units' : actualUnits.textContent, 'goal_units' : currentGoalUnits.innerHTML, 'current_line' : current_line }, // get the form data
+        data: {'actual_units' : actualUnits.textContent, 'goal_units' : currentGoalUnits.innerHTML, 'current_line' : current_line, 'color' : color }, // get the form data
         url: "update_goal",
         dataType: 'json',
         method: "POST",
