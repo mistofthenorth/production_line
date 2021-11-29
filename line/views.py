@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
+from django.db import connection
 from .models import Line, Goal, Reason
 import datetime
 
@@ -113,7 +114,45 @@ def update_goal(request):
     print(request.POST['color'])
     return JsonResponse({'test': True})
 
+
 def base_extend(request):
     template = loader.get_template('base_extend.html')
     context = {}
     return HttpResponse(template.render(context, request))    
+
+
+def report(request):
+    try:
+        current_line = request.GET['line']
+        current_line = Line.objects.filter(uid=current_line).first()
+    except:
+        current_line = Line.objects.first()
+    current_line_id = current_line.id
+    lines = Line.objects.all()
+    template = loader.get_template('report.html')
+    with connection.cursor() as cursor:
+        sql = f"""
+        SELECT 
+            AVG(cycle_time) AS avg_cycle_time,
+            line_id AS line_id,
+            strftime("%Y-%m", date) as 'month-year'
+        FROM line_goal
+        WHERE line_id = {current_line_id}
+        GROUP BY 
+            strftime("%Y-%m", date),
+            line_id
+        ORDER BY
+            strftime("%Y-%m", date) DESC
+        
+        """
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        print(type(rows[0]))
+        print(rows)
+        rows = rows[0:6]
+        rows.reverse()
+        values = [x[0] for x in rows]
+        line_id = [x[1] for x in rows]
+        month_year = [x[2] for x in rows]
+        context = {'title': current_line.description, 'values': values, 'line_id': line_id, 'month_year': month_year, 'rows': rows, 'lines': lines}
+    return HttpResponse(template.render(context, request))
