@@ -147,12 +147,119 @@ def report(request):
         """
         cursor.execute(sql)
         rows = cursor.fetchall()
-        print(type(rows[0]))
-        print(rows)
         rows = rows[0:6]
         rows.reverse()
         values = [x[0] for x in rows]
         line_id = [x[1] for x in rows]
         month_year = [x[2] for x in rows]
         context = {'title': current_line.description, 'values': values, 'line_id': line_id, 'month_year': month_year, 'rows': rows, 'lines': lines}
+    return HttpResponse(template.render(context, request))
+
+
+def report2(request):
+    try:
+        current_line = request.GET['line']
+        current_line = Line.objects.filter(uid=current_line).first()
+    except:
+        current_line = Line.objects.first()
+    current_line_id = current_line.id
+    lines = Line.objects.all()
+    template = loader.get_template('report2.html')
+    with connection.cursor() as cursor:
+        sql = f"""
+        SELECT 
+            SUM(real_time_goal) AS sum_goal,
+            SUM(actual)			AS sum_actual,
+            line_id 			AS line_id,
+            strftime("%Y-%m", date) as 'month-year'
+        FROM line_goal
+        WHERE line_id = {current_line_id}
+        GROUP BY 
+            strftime("%Y-%m", date),
+            line_id
+        ORDER BY
+            strftime("%Y-%m", date) DESC
+
+        """
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        rows = rows[0:6]
+        rows.reverse()
+        goals = [x[0] for x in rows]
+        actuals = [x[1] for x in rows]
+        line_id = [x[2] for x in rows]
+        month_year = [x[3] for x in rows]
+        context = {'title': current_line.description, 'goals': goals, 'actuals': actuals, 'line_id': line_id, 'month_year': month_year,
+                   'rows': rows, 'lines': lines}
+    return HttpResponse(template.render(context, request))
+
+def report3(request):
+    try:
+        current_line = request.GET['line']
+        current_line = Line.objects.filter(uid=current_line).first()
+    except:
+        current_line = Line.objects.first()
+    current_line_id = current_line.id
+    lines = Line.objects.all()
+    template = loader.get_template('report3.html')
+    with connection.cursor() as cursor:
+        sql = f"""
+        SELECT 
+            SUM(actual)			AS sum_actual,
+            line_id 			AS line_id,
+            strftime("%Y-%m", date) as 'month-year'
+        FROM line_goal
+        WHERE line_id = {current_line_id}
+        GROUP BY 
+            strftime("%Y-%m", date),
+            line_id
+        ORDER BY
+            strftime("%Y-%m", date) DESC
+
+        """
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        rows = rows[0:6]
+        rows.reverse()
+        actuals = [x[0] for x in rows]
+        line_id = [x[1] for x in rows]
+        month_year = [x[2] for x in rows]
+        context = {'title': current_line.description, 'actuals': actuals, 'line_id': line_id, 'month_year': month_year,
+                   'rows': rows, 'lines': lines}
+    return HttpResponse(template.render(context, request))
+
+
+def report4(request):
+    try:
+        current_line = request.GET['line']
+        current_line = Line.objects.filter(uid=current_line).first()
+    except:
+        current_line = Line.objects.first()
+    current_line_id = current_line.id
+    lines = Line.objects.all()
+    template = loader.get_template('report4.html')
+    with connection.cursor() as cursor:
+        sql = f"""
+        SELECT 
+        line_reason.code,
+        line_reason.description,
+        IFNULL(totals.total, 0)
+        FROM line_reason
+        LEFT JOIN (SELECT
+        	reason_id,
+        	COUNT(*) AS total
+        	FROM line_goal
+        	WHERE line_id = {current_line_id}
+        	AND strftime("%Y-%m", date) = strftime("%Y-%m", DATE())
+        	GROUP BY reason_id) as totals
+        ON totals.reason_id = line_reason.code
+
+        """
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        codes = [x[0] for x in rows]
+        descriptions = [x[1] for x in rows]
+        values = [x[2] for x in rows]
+        context = {'title': current_line.description, 'codes': codes, 'descriptions': descriptions, 'values': values,
+                   'rows': rows, 'lines': lines}
     return HttpResponse(template.render(context, request))
