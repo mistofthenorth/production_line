@@ -125,34 +125,50 @@ def report(request):
     try:
         current_line = request.GET['line']
         current_line = Line.objects.filter(uid=current_line).first()
+        eon = request.GET['eon']
     except:
         current_line = Line.objects.first()
+        eon = 'Month'
+    print(request.GET)
     current_line_id = current_line.id
     lines = Line.objects.all()
     template = loader.get_template('report.html')
+    if eon == 'Week':
+        eon_text = """(date(date, 'weekday 0', '-7 day'))"""
+        eon_sql = """strftime("%Y-%m", date)"""
+        periods_back = 12
+    elif eon == 'Month':
+        eon_text = """strftime("%Y-%m", date)"""
+        eon_sql = """strftime("%Y-%W", date)"""
+        periods_back = 6
+    else:
+        eon_text = """strftime("%Y-%m-%d", date)"""
+        eon_sql = """date"""
+        periods_back = 14
     with connection.cursor() as cursor:
         sql = f"""
         SELECT 
             AVG(cycle_time) AS avg_cycle_time,
             line_id AS line_id,
-            strftime("%Y-%m", date) as 'month-year'
+            {eon_text} as 'month-year'
         FROM line_goal
         WHERE line_id = {current_line_id}
         GROUP BY 
-            strftime("%Y-%m", date),
+            {eon_sql} ,
             line_id
         ORDER BY
-            strftime("%Y-%m", date) DESC
+            {eon_sql}  DESC
         
         """
+        print(sql)
         cursor.execute(sql)
         rows = cursor.fetchall()
-        rows = rows[0:6]
+        rows = rows[0:periods_back]
         rows.reverse()
         values = [x[0] for x in rows]
         line_id = [x[1] for x in rows]
         month_year = [x[2] for x in rows]
-        context = {'title': current_line.description, 'values': values, 'line_id': line_id, 'month_year': month_year, 'rows': rows, 'lines': lines}
+        context = {'title': current_line.description, 'values': values, 'line_id': line_id, 'month_year': month_year, 'rows': rows, 'lines': lines, 'current_eon': eon, 'current_line': current_line}
     return HttpResponse(template.render(context, request))
 
 
@@ -160,72 +176,102 @@ def report2(request):
     try:
         current_line = request.GET['line']
         current_line = Line.objects.filter(uid=current_line).first()
+        eon = request.GET['eon']
     except:
         current_line = Line.objects.first()
+        eon = 'Month'
+    print(request.GET)
     current_line_id = current_line.id
     lines = Line.objects.all()
     template = loader.get_template('report2.html')
+    if eon == 'Week':
+        eon_text = """(date(date, 'weekday 0', '-7 day'))"""
+        eon_sql = """strftime("%Y-%m", date)"""
+        periods_back = 12
+    elif eon == 'Month':
+        eon_text = """strftime("%Y-%m", date)"""
+        eon_sql = """strftime("%Y-%W", date)"""
+        periods_back = 6
+    else:
+        eon_text = """strftime("%Y-%m-%d", date)"""
+        eon_sql = """date"""
+        periods_back = 14
     with connection.cursor() as cursor:
         sql = f"""
         SELECT 
             SUM(real_time_goal) AS sum_goal,
             SUM(actual)			AS sum_actual,
             line_id 			AS line_id,
-            strftime("%Y-%m", date) as 'month-year'
+            {eon_text} as 'month-year'
         FROM line_goal
         WHERE line_id = {current_line_id}
         GROUP BY 
-            strftime("%Y-%m", date),
+            {eon_sql} ,
             line_id
         ORDER BY
-            strftime("%Y-%m", date) DESC
+            {eon_sql} DESC
 
         """
         cursor.execute(sql)
         rows = cursor.fetchall()
-        rows = rows[0:6]
+        rows = rows[0:periods_back]
         rows.reverse()
         goals = [x[0] for x in rows]
         actuals = [x[1] for x in rows]
         line_id = [x[2] for x in rows]
         month_year = [x[3] for x in rows]
         context = {'title': current_line.description, 'goals': goals, 'actuals': actuals, 'line_id': line_id, 'month_year': month_year,
-                   'rows': rows, 'lines': lines}
+                   'rows': rows, 'lines': lines, 'current_eon': eon, 'current_line': current_line}
     return HttpResponse(template.render(context, request))
 
 def report3(request):
     try:
         current_line = request.GET['line']
         current_line = Line.objects.filter(uid=current_line).first()
+        eon = request.GET['eon']
     except:
         current_line = Line.objects.first()
+        eon = 'Month'
+    print(request.GET)
     current_line_id = current_line.id
     lines = Line.objects.all()
     template = loader.get_template('report3.html')
+    if eon == 'Week':
+        eon_text = """(date(date, 'weekday 0', '-7 day'))"""
+        eon_sql = """strftime("%Y-%m", date)"""
+        periods_back = 12
+    elif eon == 'Month':
+        eon_text = """strftime("%Y-%m", date)"""
+        eon_sql = """strftime("%Y-%W", date)"""
+        periods_back = 6
+    else:
+        eon_text = """strftime("%Y-%m-%d", date)"""
+        eon_sql = """date"""
+        periods_back = 14
     with connection.cursor() as cursor:
         sql = f"""
         SELECT 
             SUM(actual)			AS sum_actual,
             line_id 			AS line_id,
-            strftime("%Y-%m", date) as 'month-year'
+            {eon_text} as 'month-year'
         FROM line_goal
         WHERE line_id = {current_line_id}
         GROUP BY 
-            strftime("%Y-%m", date),
+            {eon_sql},
             line_id
         ORDER BY
-            strftime("%Y-%m", date) DESC
+            {eon_sql} DESC
 
         """
         cursor.execute(sql)
         rows = cursor.fetchall()
-        rows = rows[0:6]
+        rows = rows[0:periods_back]
         rows.reverse()
         actuals = [x[0] for x in rows]
         line_id = [x[1] for x in rows]
         month_year = [x[2] for x in rows]
         context = {'title': current_line.description, 'actuals': actuals, 'line_id': line_id, 'month_year': month_year,
-                   'rows': rows, 'lines': lines}
+                   'rows': rows, 'lines': lines, 'current_eon': eon, 'current_line': current_line}
     return HttpResponse(template.render(context, request))
 
 
