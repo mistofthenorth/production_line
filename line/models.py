@@ -68,3 +68,11 @@ class Goal(models.Model):
 
     def __str__(self):
         return f"{self.line.description} - {self.date}"
+
+
+class Control(models.Model):
+    rule = models.CharField(max_length=1000, unique=True)
+    value = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.rule

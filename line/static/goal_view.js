@@ -14,14 +14,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     console.log(cycleTime.textContent);
 
-    if (is_active === 'False'){
-        startTimer.disabled = true;
-        stopTimer.disabled = true;
-        submit.disabled = true;
-        unitDone.disabled = true;
-        unitRemove.disabled = true;
-    }
-
     function update_actual_color(){
         console.log(warning_units)
         console.log(error_units)
@@ -125,5 +117,68 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     currentDate.innerHTML = 'Date <br>' + new Date().toLocaleDateString("en-US");
 
+        var clickEvent = new MouseEvent("click", {
+        "view": window,
+        "bubbles": true,
+        "cancelable": false
+        });
 
+    const stopActivity = () => {
+        stopTimer.dispatchEvent(clickEvent);
+        startTimer.disabled = true;
+        stopTimer.disabled = true;
+        submit.disabled = true;
+        unitDone.disabled = true;
+        unitRemove.disabled = true;
+    }
+
+    const startActivity = () => {
+        startTimer.disabled = false;
+        stopTimer.disabled = false;
+        submit.disabled = false;
+        unitDone.disabled = false;
+        unitRemove.disabled = false;
+        startTimer.dispatchEvent(clickEvent);
+    }
+
+    if (is_active === 'False'){
+        stopActivity();
+    }
+
+    const checkForStop = () => {
+        var checkForStop = setInterval(function(){
+            console.log('ping');
+            $.ajax({
+            url: "getStartStop",
+            success: function (response) {
+                console.log(response)
+                if (response == 'Stop') {
+                        stopActivity();
+                        clearInterval(checkForStop);
+                        checkForStart();
+                    }
+                }
+            });
+        }, 10000);
+    }
+
+    const checkForStart = () => {
+        var checkForStart = setInterval(function(){
+            console.log('ping');
+            $.ajax({
+            url: "getStartStop",
+            success: function (response) {
+                console.log(response)
+                if (response == 'Start') {
+                        console.log('ping for start')
+                        startActivity();
+                        clearInterval(checkForStart);
+                        checkForStop();
+                    }
+                }
+            });
+        }, 10000);
+    }
+
+    checkForStop();
 })

@@ -13,4 +13,5 @@ urlpatterns = [
     path('report', views.report, name='report'),
     path('report2', views.report2, name='report2'),
     path('report3', views.report3, name='report3'),
-    path('report4', views.report4, name='report4')]
+    path('report4', views.report4, name='report4'),
+    path('getStartStop', views.get_start_stop, name='getStartStop')]

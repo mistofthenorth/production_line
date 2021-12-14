@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.db import connection
-from .models import Line, Goal, Reason
+from .models import Line, Goal, Reason, Control
 import datetime
 
 
@@ -119,6 +119,11 @@ def base_extend(request):
     template = loader.get_template('base_extend.html')
     context = {}
     return HttpResponse(template.render(context, request))    
+
+
+def get_start_stop(request):
+    rule = Control.objects.filter(rule='globalStartStop').first()
+    return HttpResponse(rule.value)
 
 
 def report(request):
