@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     currentDate.innerHTML = 'Date <br>' + new Date().toLocaleDateString("en-US");
 
-        var clickEvent = new MouseEvent("click", {
+    var clickEvent = new MouseEvent("click", {
         "view": window,
         "bubbles": true,
         "cancelable": false
@@ -153,6 +153,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             success: function (response) {
                 console.log(response)
                 if (response == 'Stop') {
+                        console.log('ping for stop')
                         stopActivity();
                         clearInterval(checkForStop);
                         checkForStart();
@@ -171,7 +172,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 console.log(response)
                 if (response == 'Start') {
                         console.log('ping for start')
-                        startActivity();
+                        console.log(is_active)
+                        if (is_active === 'True'){
+                            startActivity();
+                        }
                         clearInterval(checkForStart);
                         checkForStop();
                     }

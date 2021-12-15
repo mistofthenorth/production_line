@@ -35,13 +35,23 @@ def goal_view(request):
 
 
 def manager_view(request):
+    try:
+        action = request.GET['action']
+    except:
+        action = 'none'
+    global_start_stop = Control.objects.filter(rule='globalStartStop').first()
+    if action == 'start':
+        global_start_stop.value = 'Start'
+        global_start_stop.save()
+    elif action == 'stop':
+        global_start_stop.value = 'Stop'
+        global_start_stop.save()
     template = loader.get_template('manager_view.html')
     lines = Line.objects.all()
     now = datetime.datetime.now().date()
     open_goals = Goal.objects.filter(is_active=1, date=now)
     closed_goals = Goal.objects.filter(is_active=0, date=now)
-    abandoned_goals = Goal.objects.filter(is_active=1, date__lt=now)
-    context = {'open_goals': open_goals, 'closed_goals': closed_goals, 'abandoned_goals': abandoned_goals, 'lines': lines}
+    context = {'open_goals': open_goals, 'closed_goals': closed_goals, 'lines': lines, 'global_start_stop': global_start_stop.value, 'action': action}
     return HttpResponse(template.render(context, request))
 
 

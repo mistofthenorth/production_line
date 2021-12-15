@@ -19,7 +19,7 @@
   			<h1>{{current_line.description}}</h1>
   		</div>
 	</div>
-	<div class="row">
+	<div class="row" {% if active_goal.is_active is False %}style="opacity: 0.7;" {% endif %}>
 		<div class="col-md-6" align="center">
 			<div class="panel panel-default">
 

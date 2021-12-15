@@ -67,37 +67,7 @@
   </tbody>
 </table>
 
-
-<table class="table-striped table">
-  <thead>
-    <h2>Un-closed Value Streams</h2>
-    <tr>
-      <th>Date</th>
-      <th>Value Stream</th>
-      <th>Daily Goal</th>
-      <th>Cycle Time</th>
-      <th>Real Time Goal</th>
-      <th>Actual</th>
-      <th>Headcount</th>
-      <th>Reason</th>
-      <th>Comment</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-    {% for goal in abandoned_goals %}
-      <td>{{goal.date}}</td>
-      <td>{{goal.line}}</td>
-      <td>{{goal.goal}}</td>
-      <td>{{goal.cycle_time}}</td>
-      <td>{{goal.real_time_goal}}</td>
-      <td>{{goal.actual}}</td>
-      <td>{{goal.headcount}}</td>
-      <td>{{goal.reason.description}}</td>
-      <td>{{goal.comment}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<button type="button" class="btn btn-danger" onclick="window.location.href='manager_view?action=stop';" {% if action == 'stop' %} disabled {% endif %}>Stop All Value Streams</button>
+<button type="button" class="btn btn-success" onclick="window.location.href='manager_view?action=start';" {% if action != 'stop' %} disabled {% endif %}>Restart All Value Streams</button>
 {% endblock %}
 
