@@ -8,7 +8,19 @@
   	var is_active = '{{active_goal.is_active}}'
   	var warning_units = '{{current_line.warning_units}}'
   	var error_units = '{{current_line.error_units}}'
+  	var start_hour = []
+	var start_minute = []
+	var end_hour = []
+	var end_minute = []
+  	{% for schedule in schedules %}
+		start_hour.push('{{schedule.start_hour}}');
+		start_minute.push('{{schedule.start_minute}}');
+		end_hour.push('{{schedule.end_hour}}');
+		end_minute.push('{{schedule.end_minute}}');
+	{% endfor %}
+
   </script>
+  {{schedules}}
   <script src="{% static '../static/goal_view.js' %}"></script>
 
 	<div class="row">

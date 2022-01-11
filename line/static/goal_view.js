@@ -185,4 +185,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     checkForStop();
+
+    var now = new Date();
+    for (var i = 0; i < start_hour.length; i++) {
+        console.log('Looping through the schedules');
+        console.log('Start Time is ' + start_hour[i] + ':' + start_minute[i]);
+        console.log('End Time is ' + end_hour[i] + ':' + end_minute[i]);
+
+        var start_time = new Date(now.getFullYear(), now.getMonth(), now.getDate(), start_hour[i], start_minute[i], 0, 0) - now;
+	    if (start_time > 0) {
+			setTimeout(function(){startTimer.dispatchEvent(clickEvent);}, start_time);
+	        console.log(start_time);
+	    };
+	    var stop_time = new Date(now.getFullYear(), now.getMonth(), now.getDate(), end_hour[i], end_minute[i], 0, 0) - now;
+        if (stop_time > 0) {
+			setTimeout(function(){stopTimer.dispatchEvent(clickEvent);}, stop_time);
+	        console.log(stop_time);
+	    };
+
+    }
+
+
 })

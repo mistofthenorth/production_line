@@ -76,3 +76,14 @@ class Control(models.Model):
 
     def __str__(self):
         return self.rule
+
+
+class Schedule(models.Model):
+    start_hour = models.IntegerField()
+    start_minute = models.IntegerField()
+    end_hour = models.IntegerField()
+    end_minute = models.IntegerField()
+    line_uid = models.ForeignKey(Line, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.line_uid} : {self.start_hour}:{self.start_minute} - {self.end_hour}:{self.end_minute}"

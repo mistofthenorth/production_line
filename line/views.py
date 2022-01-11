@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.db import connection
-from .models import Line, Goal, Reason, Control
+from .models import Line, Goal, Reason, Control, Schedule
 import datetime
 
 
@@ -29,8 +29,10 @@ def goal_view(request):
     except:
         (active_goal, created) = Goal.objects.get_or_create(line=current_line, date=now, goal=current_line.goal_time,
                                                             cycle_time=current_line.cycle_time, headcount=current_line.default_headcount, actual=0, real_time_goal=0, is_active=1)
+    schedules = Schedule.objects.filter(line_uid=current_line)
+
     context = {'lines': lines, 'current_line': current_line,
-               'active_goal': active_goal}
+               'active_goal': active_goal, 'schedules': schedules}
     return HttpResponse(template.render(context, request))
 
 
@@ -127,7 +129,12 @@ def update_goal(request):
 
 def base_extend(request):
     template = loader.get_template('base_extend.html')
-    context = {}
+    now = datetime.datetime.now()
+    current_line = Line.objects.filter(uid=100).first()
+    print(current_line)
+    schedules = Schedule.objects.filter(line_uid=current_line)
+    print(schedules)
+    context = {'now': now, 'schedules': schedules[0]}
     return HttpResponse(template.render(context, request))    
 
 
