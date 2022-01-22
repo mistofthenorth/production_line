@@ -28,7 +28,7 @@ const ctx = document.getElementById('myChart').getContext('2d');
 const myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{month_year|safe}},
+        labels: {{eon|safe}},
         datasets: [{
             label: 'Goal',
             data: {{goals|safe}},

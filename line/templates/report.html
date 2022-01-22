@@ -29,7 +29,7 @@ const ctx = document.getElementById('myChart').getContext('2d');
 const myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: {{month_year|safe}},
+        labels: {{eons|safe}},
         datasets: [{
             label: '{{title}}',
             data: {{values|safe}},

@@ -143,10 +143,10 @@ def get_start_stop(request):
     return HttpResponse(rule.value)
 
 
-def report(request):
+def get_standard_report_vars(request):
     try:
-        current_line = request.GET['line']
-        current_line = Line.objects.filter(uid=current_line).first()
+        current_line_id = request.GET['line']
+        current_line = Line.objects.filter(uid=current_line_id).first()
         eon = request.GET['eon']
     except:
         current_line = Line.objects.first()
@@ -154,14 +154,22 @@ def report(request):
     print(request.GET)
     current_line_id = current_line.id
     lines = Line.objects.all()
+    context = {'title': current_line.description, 'line_id': current_line_id,
+               'lines': lines, 'current_eon': eon, 'current_line': current_line}
+    return lines, current_line, current_line_id, eon, context
+
+
+def report(request):
+    lines, current_line, current_line_id, eon, context = get_standard_report_vars(request)
     template = loader.get_template('report.html')
+
     if eon == 'Week':
         eon_text = """(date(date, 'weekday 0', '-7 day'))"""
-        eon_sql = """strftime("%Y-%m", date)"""
+        eon_sql = """strftime("%Y-%w", date)"""
         periods_back = 12
     elif eon == 'Month':
         eon_text = """strftime("%Y-%m", date)"""
-        eon_sql = """strftime("%Y-%W", date)"""
+        eon_sql = """strftime("%Y-%m", date)"""
         periods_back = 6
     else:
         eon_text = """strftime("%Y-%m-%d", date)"""
@@ -171,13 +179,11 @@ def report(request):
         sql = f"""
         SELECT 
             AVG(cycle_time) AS avg_cycle_time,
-            line_id AS line_id,
-            {eon_text} as 'month-year'
+            {eon_text} as 'eon'
         FROM line_goal
         WHERE line_id = {current_line_id}
         GROUP BY 
-            {eon_sql} ,
-            line_id
+            {eon_sql}
         ORDER BY
             {eon_sql}  DESC
         
@@ -185,27 +191,20 @@ def report(request):
         print(sql)
         cursor.execute(sql)
         rows = cursor.fetchall()
+        # Slice here to limit to requested periods back, then reverse to put oldest record first for proper charting
         rows = rows[0:periods_back]
         rows.reverse()
         values = [x[0] for x in rows]
-        line_id = [x[1] for x in rows]
-        month_year = [x[2] for x in rows]
-        context = {'title': current_line.description, 'values': values, 'line_id': line_id, 'month_year': month_year, 'rows': rows, 'lines': lines, 'current_eon': eon, 'current_line': current_line}
+        context['values'] = values
+        eons = [x[1] for x in rows]
+        context['eons'] = eons
     return HttpResponse(template.render(context, request))
 
 
 def report2(request):
-    try:
-        current_line = request.GET['line']
-        current_line = Line.objects.filter(uid=current_line).first()
-        eon = request.GET['eon']
-    except:
-        current_line = Line.objects.first()
-        eon = 'Month'
-    print(request.GET)
-    current_line_id = current_line.id
-    lines = Line.objects.all()
+    lines, current_line, current_line_id, eon, context = get_standard_report_vars(request)
     template = loader.get_template('report2.html')
+
     if eon == 'Week':
         eon_text = """(date(date, 'weekday 0', '-7 day'))"""
         eon_sql = """strftime("%Y-%m", date)"""
@@ -223,13 +222,11 @@ def report2(request):
         SELECT 
             SUM(real_time_goal) AS sum_goal,
             SUM(actual)			AS sum_actual,
-            line_id 			AS line_id,
-            {eon_text} as 'month-year'
+            {eon_text} as 'eon'
         FROM line_goal
         WHERE line_id = {current_line_id}
         GROUP BY 
-            {eon_sql} ,
-            line_id
+            {eon_sql}
         ORDER BY
             {eon_sql} DESC
 
@@ -239,24 +236,17 @@ def report2(request):
         rows = rows[0:periods_back]
         rows.reverse()
         goals = [x[0] for x in rows]
+        context['goals'] = goals
         actuals = [x[1] for x in rows]
-        line_id = [x[2] for x in rows]
-        month_year = [x[3] for x in rows]
-        context = {'title': current_line.description, 'goals': goals, 'actuals': actuals, 'line_id': line_id, 'month_year': month_year,
-                   'rows': rows, 'lines': lines, 'current_eon': eon, 'current_line': current_line}
+        context['actuals'] = actuals
+        eon = [x[2] for x in rows]
+        context['eon'] = eon
+
     return HttpResponse(template.render(context, request))
 
+
 def report3(request):
-    try:
-        current_line = request.GET['line']
-        current_line = Line.objects.filter(uid=current_line).first()
-        eon = request.GET['eon']
-    except:
-        current_line = Line.objects.first()
-        eon = 'Month'
-    print(request.GET)
-    current_line_id = current_line.id
-    lines = Line.objects.all()
+    lines, current_line, current_line_id, eon, context = get_standard_report_vars(request)
     template = loader.get_template('report3.html')
     if eon == 'Week':
         eon_text = """(date(date, 'weekday 0', '-7 day'))"""
@@ -274,8 +264,7 @@ def report3(request):
         sql = f"""
         SELECT 
             SUM(actual)			AS sum_actual,
-            line_id 			AS line_id,
-            {eon_text} as 'month-year'
+            {eon_text} as       'eon'
         FROM line_goal
         WHERE line_id = {current_line_id}
         GROUP BY 
@@ -290,21 +279,15 @@ def report3(request):
         rows = rows[0:periods_back]
         rows.reverse()
         actuals = [x[0] for x in rows]
-        line_id = [x[1] for x in rows]
-        month_year = [x[2] for x in rows]
-        context = {'title': current_line.description, 'actuals': actuals, 'line_id': line_id, 'month_year': month_year,
-                   'rows': rows, 'lines': lines, 'current_eon': eon, 'current_line': current_line}
+        context['actuals'] = actuals
+        eon = [x[1] for x in rows]
+        context['eon'] = eon
+
     return HttpResponse(template.render(context, request))
 
 
 def report4(request):
-    try:
-        current_line = request.GET['line']
-        current_line = Line.objects.filter(uid=current_line).first()
-    except:
-        current_line = Line.objects.first()
-    current_line_id = current_line.id
-    lines = Line.objects.all()
+    lines, current_line, current_line_id, eon, context = get_standard_report_vars(request)
     template = loader.get_template('report4.html')
     with connection.cursor() as cursor:
         sql = f"""
@@ -326,8 +309,10 @@ def report4(request):
         cursor.execute(sql)
         rows = cursor.fetchall()
         codes = [x[0] for x in rows]
+        context['codes'] = codes
         descriptions = [x[1] for x in rows]
+        context['descriptions'] = descriptions
         values = [x[2] for x in rows]
-        context = {'title': current_line.description, 'codes': codes, 'descriptions': descriptions, 'values': values,
-                   'rows': rows, 'lines': lines}
+        context['values'] = values
+
     return HttpResponse(template.render(context, request))
