@@ -205,5 +205,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     }
 
+    document.addEventListener("keyup", function (event) {
+
+        // Checking if key pressed is ENTER or not
+        // if the key pressed is ENTER
+        // click listener on button is called
+        console.log('event listener')
+        if (event.keyCode == 32) {
+            unitDone.dispatchEvent(clickEvent);
+        }
+    });
 
 })
