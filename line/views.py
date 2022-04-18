@@ -147,10 +147,14 @@ def get_standard_report_vars(request):
     try:
         current_line_id = request.GET['line']
         current_line = Line.objects.filter(uid=current_line_id).first()
-        eon = request.GET['eon']
     except:
         current_line = Line.objects.first()
+
+    try:
+        eon = request.GET['eon']
+    except:
         eon = 'Month'
+
     print(request.GET)
     current_line_id = current_line.id
     lines = Line.objects.all()
@@ -289,6 +293,7 @@ def report3(request):
 def report4(request):
     lines, current_line, current_line_id, eon, context = get_standard_report_vars(request)
     template = loader.get_template('report4.html')
+    print(request)
     with connection.cursor() as cursor:
         sql = f"""
         SELECT 
@@ -306,6 +311,7 @@ def report4(request):
         ON totals.reason_id = line_reason.code
 
         """
+        print(sql)
         cursor.execute(sql)
         rows = cursor.fetchall()
         codes = [x[0] for x in rows]
