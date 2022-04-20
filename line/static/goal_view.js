@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     unitRemove.addEventListener("click", removeUnit);
 
 
-    currentDate.innerHTML = 'Date <br>' + new Date().toLocaleDateString("en-US");
+    currentDate.innerHTML = 'Date <br> <h2>' + new Date().toLocaleDateString("en-US") + '</h2>';
 
     var clickEvent = new MouseEvent("click", {
         "view": window,
