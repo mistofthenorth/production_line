@@ -1,82 +1,89 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Pallet Shelter Production</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <!-- Bootstrap -->
-    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
-  </head>
-  <body>
+{% block content %}
+  <script>
+  	let current_line = {{current_line.uid}};
+  	let default_cycle_time = {{current_line.cycle_time}}
+  	var token = '{{csrf_token}}'
+  	var is_active = '{{active_goal.is_active}}'
+  	var warning_units = '{{current_line.warning_units}}'
+  	var error_units = '{{current_line.error_units}}'
+  	var start_hour = []
+	var start_minute = []
+	var end_hour = []
+	var end_minute = []
+  	{% for schedule in schedules %}
+		start_hour.push('{{schedule.start_hour}}');
+		start_minute.push('{{schedule.start_minute}}');
+		end_hour.push('{{schedule.end_hour}}');
+		end_minute.push('{{schedule.end_minute}}');
+	{% endfor %}
 
-  <script src="http://code.jquery.com/jquery.js"></script>
-  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  </script>
   <script src="{% static '../static/goal_view.js' %}"></script>
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-6"><img src="{% static 'Pallet_Logo.png' %}" alt="Pallet Logo" height="150" width="150"></div>
-		<div class="col-md-6"></div>
-	</div>
-
-
-
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/admin">Admin</a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Value Streams<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-          	{% for line in lines %}
-						<li><a href="/line/goal_view?line={{line.uid}}">{{line.description}}</a></li>
-						{% endfor %}
-          </ul>
-        </li>
-      </ul>
-      
-      
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
-	<div class="row">
-		
-	</div>
-	<div class="row">
-		<hr>
-	</div>
-	<div class="row">
-		<div class="span12">
-			
-		</div>
-	</div>
-	<div class="jumbotron">
+	<div class="jumbotron" style="background-color: {{current_line.color}}; margin: 0px; padding: 10px;">
   		<div align="center">
-  			<h1>{{current_line.description}}</h1>
+  			<h1 style="font-weight: 800; font-size:80px;">{{current_line.description}}</h1>
   		</div>
 	</div>
-	<div class="row">
+	<div class="row" {% if active_goal.is_active is False %}style="opacity: 0.7;" {% endif %}>
 		<div class="col-md-6" align="center">
 			<div class="panel panel-default">
-		  	<div class="panel-body">
-		  		<h1>Actual</h1>
-		  		<p>
-					<h2 id="actual-units">00</h2>
+
+				<div class="panel-body">
+		    	<h1 style="font-size:60px;">Goal</h1>
+		    	<h2 id="current-goal-units" style="font-size:60px;">{{active_goal.real_time_goal}}</h2>
+		  	</div>
+				<div class="col-xs-12" style="height:40px;"></div>
+
+			  	<div class="row">
+					  <div class="col-md-4" align="center">
+						  	<div class="panel-body">
+						    	<h1 style="font-size:40px;">Cycle</h1>
+						    	<h2 style="font-size:40px;" id="goal">{{current_line.cycle_time}}</h2>
+						  	</div>
+					  </div>
+					  <div class="col-md-4" align="center">
+					  	<div class="panel-body">
+					    	<h1 style="font-size:40px;">Daily Goal</h1>
+					    	<h2 style="font-size:40px;" id="goal">{{current_line.goal_time}}</h2>
+					  	</div>
+					  </div>
+					  <div class="col-md-4" align="center">
+					  	    <div class="panel-body">
+								<h1>
+							<div style="font-size:40px;" class="row" id="current-date">
+								date
+							</div></h1>
+					  	</div>
+					  </div>
+					</div>
+				<div class="col-xs-12" style="height:35px;"></div>
+
+				<div class="row">
+					<form action="submit" method="post">{% csrf_token %}
+					<input type="hidden" id="actual" name="actual" value="{{active_goal.actual}}">
+					<input type="hidden" id="real_time_goal" name="real_time_goal" value="{{active_goal.real_time_goal}}">
+					<input type="hidden" id="line" name="line" value="{{current_line.uid}}">
+					<button type="submit" class="btn btn-primary center-block" id="submit" value="foo" style="font-size:40px; padding: 5px;">Submit</button>
+				</form>
+
+				</div>
 			</div>
+
+		</div>
+		<div class="col-md-6" align="center">
+			<div class="panel panel-default">
+
+		  	<div class="panel-body"  id="actual-container">
+		  		<h1 style="font-size:60;">Actual</h1>
+		  		
+					<h2 id="actual-units" style="font-size:60px;">{{active_goal.actual}}</h2>
+						<button style="font-size:30px;" type="button" class="btn btn-primary" id="unit-done">Add Unit</button>
+						<button style="font-size:30px;" type="button" class="btn btn-primary" id="unit-remove">Remove Unit</button>
 			</div>
+
 			<button type="button" class="btn btn-primary" id="unit-done">Add Unit</button>
 			<button type="button" class="btn btn-primary" id="unit-remove">Remove Unit</button>
 		</div>
@@ -91,25 +98,20 @@
 		    	<h2 id="current-goal-units">00</h2>
 		  	</div>
 			</div>
-			<button type="button" class="btn btn-primary col-md-2" id="start-timer">Start Timer</button>
-			<button type="button" class="btn btn-primary col-md-2" id="stop-timer">Stop Timer</button>
 
-			<div class="panel panel-default col-md-8">
+			<div class="panel panel-default col-md-12">
 				<div class="panel-body">
-				  <h1>Cycle Time</h1>
-				  <h2 id="cycle-time">{{current_line.cycle_time}}</h2>
+				  <h1 style="font-size:40px;">Current Cycle</h1>
+				  <h2 style="font-size:60px;" id="cycle-time">{{current_line.cycle_time}}</h2>
+				  <button style="font-size:30px;" type="button" class="btn btn-primary" id="start-timer">Start Timer</button>
+					<button style="font-size:30px;" type="button" class="btn btn-primary" id="stop-timer">Stop Timer</button>
 				</div>
+
+
 			</div>
 		</div>
 	</div>
 
-  </body>
-</html>
 
-<html>
+{% endblock %}
 
-
-
-
-
-</html>

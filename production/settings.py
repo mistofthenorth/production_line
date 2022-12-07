@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-!+!c&cg%vyzr-gd#g7vlmlh+=!%82ows+s%#p)^095%agpyt5c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.2','127.0.0.1']
+ALLOWED_HOSTS = ['192.168.0.3','127.0.0.1','pallet-dev.eba-ie2pytkz.us-west-2.elasticbeanstalk.com','pallet-dev.eba-kqnhpyvw.us-west-2.elasticbeanstalk.com']
 
 
 # Application definition
@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Pacific'
 
 USE_I18N = True
 

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Content Test</h1>
+<h2>JavaScript Timing</h2>
+
+<p>Click "Try it". Wait 3 seconds. The page will alert "Hello".</p>
+<p>Click "Stop" to prevent the first function to execute.</p>
+<p>(You must click "Stop" before the 3 seconds are up.)</p>
+
+<button onclick="myVar = setTimeout(myFunction, 3000)">Try it</button>
+
+<button onclick="clearTimeout(myVar)">Stop it</button>
+
+<div id="schedule" name="schedule"></div>
+
+{{now}}
+
+{{schedules}}
+<script>
+function myFunction() {
+  alert("Hello");
+}
+
+var now = new Date();
+var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), {{schedules.start_hour}}, {{schedules.start_minute}}, 0, 0) - now;
+if (millisTill10 < 0) {
+     millisTill10 += 86400000; // it's after 10am, try 10am tomorrow.
+}
+setTimeout(function(){alert("It's 10am!")}, millisTill10);
+console.log(millisTill10)
+</script>
+
+
+
+{% endblock %}

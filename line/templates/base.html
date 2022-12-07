@@ -1,0 +1,64 @@
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}Pallet Shelter{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <!-- Bootstrap -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'Pallet_Logo.png' %}"/>
+    {% block headers %}{% endblock %}
+  </head>
+</head>
+
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+<body>
+
+    <nav class="navbar navbar-default">
+    <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <img src="{% static 'Pallet_Logo.png' %}" alt="Pallet Logo" height="60" width="60" class="navbar-brand">
+    </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/admin">Admin</a>
+    </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/manager_view">Manager</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Value Streams<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {% for line in lines %}
+                <li><a href="/goal_view?line={{line.uid}}">{{line.description}}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+        <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+              <li><a href="/report">Cycle Time Change</a></li>
+              <li><a href="/report2">Goal vs. Actual</a></li>
+              <li><a href="/report3">Actual Count</a></li>
+              <li><a href="/report4">Reason Code</a></li>
+
+          </ul>
+        </li>
+      </ul>
+      
+      </div><!-- /.navbar-collapse -->
+
+    </div><!-- /.container-fluid -->
+    </nav>
+    {% block content %}
+    {% endblock %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block headers %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+{% block content %}
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Choose Value Stream
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      {% for line in lines %}
+        <li><a href="/report4?line={{line.uid}}">{{line.description}}</a></li>
+      {% endfor %}
+  </div>
+</div>
+
+<canvas id="myChart" height="150"></canvas>
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{descriptions|safe}},
+        datasets: [{
+            label: '{{title}}',
+            data: {{values|safe}},
+            backgroundColor: 'rgba(55, 99, 132, 0.5)',
+            borderColor: 'rgba(55, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            title: {
+                display : true,
+                text : "Reasons",
+                font : {size: 24}
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}
+

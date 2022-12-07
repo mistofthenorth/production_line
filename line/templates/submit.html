@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form id="values_form" action="receive" method="post">
+{% csrf_token %}
+
+  <div class="form-group">
+    <label for="current_line_name">Current Value Stream</label>
+    <input type="hidden" class="form-control" name="current_value_stream" id="current_value_stream" value="{{current_line.uid}}">
+    <input type="text" class="form-control" name="current_value_stream" id="current_value_stream" value="{{current_line.description}}" disabled="disabled">
+  </div>
+  <div class="form-group">
+    <label for="actual_units">Actual Units Completed</label>
+    <input type="hidden" class="form-control" name="actual_units_completed" id="actual_units_completed" value="{{actual}}">
+    <input type="text" class="form-control" name="actual_units_completed" id="actual_units_completed" value="{{actual}}" disabled="disabled">
+  </div>
+  <div class="form-group">
+    <label for="geal time goal_units">Real Time Goal Units</label>
+    <input type="hidden" class="form-control" name="real_time_goal" id="real_time_goal" value="{{real_time_goal}}">
+    <input type="text" class="form-control" name="real_time_goal" id="real_time_goal" value="{{real_time_goal}}" disabled="disabled">
+  </div>
+  <div class="form-group">
+    <label for="goal_units">Daily Goal Units</label>
+    <input type="hidden" class="form-control" name="goal_units_completed" id="goal_units_completed" value="{{current_line.goal_time}}">
+    <input type="text" class="form-control" name="goal_units_completed" id="goal_units_completed" value="{{current_line.goal_time}}" disabled="disabled">
+  </div>
+  <div class="form-group">
+    <label for="cycle time">Cycle Time</label>
+    <input type="hidden" class="form-control" name="cycle_time" id="cycle_time" value="{{current_line.cycle_time}}">
+    <input type="text" class="form-control" name="cycle_time" id="cycle_time" value="{{current_line.cycle_time}}" disabled="disabled">
+  </div>
+   
+  <div class="form-group">
+    <label for="headcount">Headcount</label>
+
+    <select class="form-control" id="headcount" name="headcount">
+      <option value=1 {% if current_line.default_headcount is 1 %} selected {% endif %}>1</option>
+      <option value=2 {% if current_line.default_headcount is 2 %} selected {% endif %}>2</option>
+      <option value=3 {% if current_line.default_headcount is 3 %} selected {% endif %}>3</option>
+      <option value=4 {% if current_line.default_headcount is 4 %} selected {% endif %}>4</option>
+      <option value=5 {% if current_line.default_headcount is 5 %} selected {% endif %}>5</option>
+      <option value=6 {% if current_line.default_headcount is 6 %} selected {% endif %}>6</option>
+      <option value=7 {% if current_line.default_headcount is 7 %} selected {% endif %}>7</option>
+      <option value=8 {% if current_line.default_headcount is 8 %} selected {% endif %}>8</option>
+      <option value=9 {% if current_line.default_headcount is 9 %} selected {% endif %}>9</option>
+      <option value=10 {% if current_line.default_headcount is 10 %} selected {% endif %}>10</option>
+  </select>
+  </div>
+
+  <div class="form-group">
+  <label for="reason_code">Reason Code (optional)</label>
+
+  <select class="form-control" id="reason" name="reason">
+    {% for reason in reasons %}
+      <option value="{{reason.code}}">{{reason.code}} - {{reason.description}}</option>
+    {% endfor %}
+  </select>
+  </div>
+  <div class="form-group">
+    <label for="additional">Additional Information</label>
+    <input type="text" class="form-control" id="additional" name="additional" value="">
+  </div>
+
+  <button type="submit" class="btn btn-default">Submit</button>
+
+</form>
+
+
+</div>
+
+{% endblock %}

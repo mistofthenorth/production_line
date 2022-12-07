@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Value Stream</th>
+      <th>Daily Goal</th>
+      <th>Cycle Time</th>
+      <th>Real Time Goal</th>
+      <th>Actual</th>
+      <th>Headcount</th>
+      <th>Reason</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    {% for goal in goals %}
+      <td>{{goal.date}}</td>
+      <td>{{goal.line}}</td>
+      <td>{{goal.goal}}</td>
+      <td>{{goal.cycle_time}}</td>
+      <td>{{goal.real_time_goal}}</td>
+      <td>{{goal.actual}}</td>
+      <td>{{goal.headcount}}</td>
+      <td>{{goal.reason.description}}</td>
+      <td>{{goal.comment}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
+
